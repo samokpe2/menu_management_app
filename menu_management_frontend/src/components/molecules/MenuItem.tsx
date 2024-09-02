@@ -6,11 +6,12 @@ import circle_plus from '../../assets/circle-plus.svg'
 interface MenuItemProps {
   item: MenuItemType;
   onAdd: () => void;
+  onUpdate: () => void;
   onToggleExpand: () => void;
   isExpanded: boolean;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ item, onAdd, onToggleExpand, isExpanded}) => {
+const MenuItem: React.FC<MenuItemProps> = ({ item, onAdd, onUpdate, onToggleExpand, isExpanded}) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
   return (
@@ -34,7 +35,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, onAdd, onToggleExpand, isExpa
       )}
 
       {/* Menu Item Name */}
-      <span className="font-[400] text-[14px] leading-[14px] mt-4">
+      <span className="font-[400] text-[14px] leading-[14px] mt-4" onClick={onUpdate}>
         {item.name}
       </span>
 

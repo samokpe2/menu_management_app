@@ -8,6 +8,7 @@ import Label from '../atoms/Label';
 import Modal from '../molecules/Modal';
 import Input from '../atoms/Input';
 import { toast } from 'react-toastify';
+import UpdateMenuItemForm from './UpdateMenuItemForm';
 
 const MenusSection: React.FC = () => {
   const { data: menus, refetch: refetchMenus } = useMenus();
@@ -27,6 +28,24 @@ const MenusSection: React.FC = () => {
     menu_id: '',
     parent_id: null,
     position: 0,
+  });
+
+  const [updateMenuItemState, setUpdateMenuItemState] = useState<{
+    isOpen: boolean;
+    id: string | null;
+    menu_id: string;
+    parent_id: string | null;
+    parent_name: string | null;
+    position: number;
+    item_name: string;
+  }>({
+    isOpen: false,
+    id: null,
+    menu_id: '',
+    parent_id: null,
+    position: 0,
+    parent_name: null,
+    item_name: ""
   });
 
   const [expandedItems, setExpandedItems] = useState<{ [key: string]: boolean }>({});
@@ -74,11 +93,42 @@ const MenusSection: React.FC = () => {
   };
 
   const handleAddMenuItem = (item: MenuItemType) => {
+    setUpdateMenuItemState({
+      isOpen: false,
+      id: item.id,
+      menu_id: '',
+      parent_id: null,
+      position: 0,
+      parent_name: null,
+      item_name: ""
+    });
+
     setAddMenuItemState({
       isOpen: true,
       menu_id: selectedMenu,
       parent_id: item.id,
       position: item.position + 1,
+    });
+
+    setItemName(item.name)
+  };
+
+  const handleUpdateMenuItem = (item: MenuItemType) => {
+    setAddMenuItemState({
+      isOpen: false,
+      menu_id: '',
+      parent_id: null,
+      position: 0,
+    });
+
+    setUpdateMenuItemState({
+      isOpen: true,
+      id: item.id,
+      menu_id: selectedMenu,
+      parent_id: item.id,
+      position: item.position,
+      parent_name: item.parent_id,
+      item_name: item.name
     });
 
     setItemName(item.name)
@@ -112,7 +162,7 @@ const MenusSection: React.FC = () => {
             >
               Collapse All
             </Button>
-            <MenuList items={menuItems} onAdd={handleAddMenuItem} expandedItems={expandedItems} onToggleExpand={handleToggleExpand} />
+            <MenuList items={menuItems} onAdd={handleAddMenuItem} expandedItems={expandedItems} onToggleExpand={handleToggleExpand}  onUpdate={handleUpdateMenuItem}/>
             <Button
               onClick={() => setIsModalOpen(true)}
               backgroundColor='#253BFF'
@@ -129,6 +179,18 @@ const MenusSection: React.FC = () => {
                 parent_id={addMenuItemState.parent_id}
                 position={addMenuItemState.position}
                 item_name={item_name}
+                onClose={() => setAddMenuItemState({ isOpen: false, menu_id: '', parent_id: null, position: 0 })}
+              />
+            )}
+
+          {updateMenuItemState.isOpen && (
+              <UpdateMenuItemForm
+                id={updateMenuItemState.id}
+                menu_id={updateMenuItemState.menu_id}
+                parent_id={updateMenuItemState.parent_id}
+                position={updateMenuItemState.position}
+                item_name={updateMenuItemState.item_name}
+                parent_name={updateMenuItemState.parent_name}
                 onClose={() => setAddMenuItemState({ isOpen: false, menu_id: '', parent_id: null, position: 0 })}
               />
             )}

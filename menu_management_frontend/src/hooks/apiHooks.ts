@@ -94,7 +94,7 @@ export const useAddMenuItem = (menuId: string) => {
 };
 
 // Hook to update an existing menu item
-export const useUpdateMenuItem = (id: string, menuId: string) => {
+export const useUpdateMenuItem = (id: string | null, menuId: string) => {
   const queryClient = useQueryClient();
   return useMutation<MenuItem, Error, Partial<MenuItem>>({
     mutationFn: (updatedItem: Partial<MenuItem>) =>
@@ -106,7 +106,7 @@ export const useUpdateMenuItem = (id: string, menuId: string) => {
 };
 
 // Hook to delete a menu item
-export const useDeleteMenuItem = (id: string, menuId: string) => {
+export const useDeleteMenuItem = (id: string | null, menuId: string) => {
   const queryClient = useQueryClient();
   return useMutation<void, Error>({
     mutationFn: () => axios.delete(`${API_BASE_URL}/menu-items/${id}`).then((res) => res.data),

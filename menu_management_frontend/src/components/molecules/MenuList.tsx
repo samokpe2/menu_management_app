@@ -5,11 +5,12 @@ import { MenuItem as MenuItemType } from '../../hooks/apiHooks';
 interface MenuListProps {
   items: MenuItemType[];
   onAdd: (item: MenuItemType) => void;
+  onUpdate: (item: MenuItemType) => void;
   expandedItems: { [key: string]: boolean };
   onToggleExpand: (id: string) => void;
 }
 
-const MenuList: React.FC<MenuListProps> = ({ items, onAdd, expandedItems, onToggleExpand }) => {
+const MenuList: React.FC<MenuListProps> = ({ items, onAdd, onUpdate, expandedItems, onToggleExpand }) => {
   const buildMenuTree = (items: MenuItemType[]): MenuItemType[] => {
     const map: { [key: string]: MenuItemType } = {};
     const roots: MenuItemType[] = [];
@@ -60,6 +61,7 @@ const MenuList: React.FC<MenuListProps> = ({ items, onAdd, expandedItems, onTogg
           <MenuItem
             item={item}
             onAdd={() => onAdd(item)}
+            onUpdate={() => onUpdate(item)}
             onToggleExpand={() => onToggleExpand(item.id)}
             isExpanded={expandedItems[item.id] || false}
           />
